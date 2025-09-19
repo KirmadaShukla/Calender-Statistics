@@ -1,38 +1,38 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import BarGraphPopup from './BarGraphPopup';
-import { fetchData, hasDataForDate, getDataForDate, getDatesWithEvents } from './DataProvider';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCalendarData, setSelectedDate, clearSelectedDate, selectCalendarData, selectSelectedDate, selectSelectedDateData, selectLoading, selectHasDataForDate } from '../store/slices/calendarSlice';
 
 const localizer = momentLocalizer(moment);
 
 const CalendarView = () => {
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [showPopup, setShowPopup] = useState(false);
-  const [popupData, setPopupData] = useState([]);
-  const [events, setEvents] = useState([]);
-  const [dummyData, setDummyData] = useState({});
+  const dispatch = useDispatch();
+  const dummyData = useSelector(selectCalendarData);
+  const selectedDate = useSelector(selectSelectedDate);
+  const popupData = useSelector(selectSelectedDateData);
+  const loading = useSelector(selectLoading);
+  const showPopup = useSelector((state) => !!state.calendar.selectedDate);
+  const hasDataForDate = (date) => selectHasDataForDate({ calendar: { data: dummyData } }, date);
 
   // Fetch data on component mount
   useEffect(() => {
-    const loadData = async () => {
-      const data = await fetchData();
-      setDummyData(data);
-      
-      // Create events for dates with data
-      const eventData = getDatesWithEvents(data).map(date => ({
-        title: 'Data Available',
-        start: date,
-        end: date,
-        allDay: true
-      }));
-      
-      setEvents(eventData);
+    dispatch(fetchCalendarData());
+  }, [dispatch]);
+
+  // Create events for dates with data
+  const events = Object.keys(dummyData).map(dateString => {
+    const [day, month, year] = dateString.split('-');
+    const date = new Date(year, month - 1, day);
+    return {
+      title: 'Data Available',
+      start: date,
+      end: date,
+      allDay: true
     };
-    
-    loadData();
-  }, []);
+  });
 
   // Custom event style for dates with data
   const eventPropGetter = (event, start, end, isSelected) => {
@@ -51,10 +51,8 @@ const CalendarView = () => {
   // Handle date selection
   const handleSelectDate = (slotInfo) => {
     const date = slotInfo.start;
-    if (hasDataForDate(date, dummyData)) {
-      setSelectedDate(date);
-      setPopupData(getDataForDate(date, dummyData));
-      setShowPopup(true);
+    if (hasDataForDate(date)) {
+      dispatch(setSelectedDate(date));
     } else {
       alert("No data found for the selected date.");
     }
@@ -63,14 +61,16 @@ const CalendarView = () => {
   // Handle event selection (click on highlighted date)
   const handleSelectEvent = (event) => {
     const date = event.start;
-    if (hasDataForDate(date, dummyData)) {
-      setSelectedDate(date);
-      setPopupData(getDataForDate(date, dummyData));
-      setShowPopup(true);
+    if (hasDataForDate(date)) {
+      dispatch(setSelectedDate(date));
     } else {
       alert("No data found for the selected date.");
     }
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="h-screen p-4">
@@ -93,7 +93,7 @@ const CalendarView = () => {
         <BarGraphPopup 
           date={selectedDate} 
           data={popupData} 
-          onClose={() => setShowPopup(false)} 
+          onClose={() => dispatch(clearSelectedDate())} 
         />
       )}
     </div>

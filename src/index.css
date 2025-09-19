@@ -1,1 +1,14 @@
 @import "tailwindcss";
+
+/* Additional styles for the calendar */
+.rbc-calendar {
+  height: 100%;
+}
+
+.rbc-event {
+  background-color: #3174ad;
+}
+
+.rbc-day-slot .rbc-selected-cell {
+  background-color: rgba(49, 116, 173, 0.1);
+}
