@@ -4,12 +4,12 @@ A React-based dashboard that integrates React Big Calendar with interactive bar 
 
 ## Features
 
-- 📅 Interactive calendar view (date, week, month)
-- 📊 Bar graph visualization for date-specific data
-- 🎨 Responsive design using Tailwind CSS
-- 🗃️ State management with Redux Toolkit
-- 🌐 Cross-platform compatibility
-- 🚀 Fast development with Vite
+-  Interactive calendar view (date, week, month)
+-  Bar graph visualization for date-specific data
+-  Responsive design using Tailwind CSS
+-  State management with Redux Toolkit
+-  Cross-platform compatibility
+-  Fast development with Vite
 
 ## Project Structure
 
@@ -35,7 +35,7 @@ src/
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/KirmadaShukla/Calender-Statistics.git
    cd calendar-statistics
    ```
 
@@ -153,8 +153,8 @@ The application uses Tailwind CSS for styling with some custom CSS for the calen
 
 ### Adding New Features
 
-1. Create new components in the `src/components/` directory
-2. Add new state slices in the `src/store/` directory if needed
+1. Create new components in the `src/Components/` directory
+2. Add new state slices in the `src/store/slices` directory if needed
 3. Update the main App.jsx file to include new components
 4. Follow the existing code style and patterns
 
@@ -166,7 +166,7 @@ The calendar component can be customized by modifying the props passed to the `C
 
 To use a different data structure:
 1. Update the `public/dummy.json` file
-2. Modify the `fetchCalendarData` thunk in `src/store/calendarSlice.js` to process the new structure
+2. Modify the `fetchCalendarData` thunk in `src/store/slices/calendarSlice.js` to process the new structure
 3. Update the data transformation logic in `BarGraphPopup.jsx`
 
 ## Deployment
@@ -196,15 +196,5 @@ This project uses modern JavaScript features and is compatible with:
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a pull request
 
-## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Acknowledgements
-
-- [React](https://reactjs.org/) - A JavaScript library for building user interfaces
-- [React Big Calendar](https://github.com/jquense/react-big-calendar) - Calendar component for React
-- [Recharts](https://recharts.org/) - Redefined chart library built with React and D3
-- [Redux Toolkit](https://redux-toolkit.js.org/) - The official, opinionated, batteries-included toolset for efficient Redux development
-- [Vite](https://vitejs.dev/) - Next generation frontend tooling
-- [Tailwind CSS](https://tailwindcss.com/) - A utility-first CSS framework
